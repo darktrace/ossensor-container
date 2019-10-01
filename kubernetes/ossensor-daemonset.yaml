@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ossensor
+spec:
+  selector:
+    matchLabels:
+      name: ossensor
+  template:
+    metadata:
+      labels:
+        name: ossensor
+    spec:
+      hostNetwork: true
+      containers:
+      - name: ossensor
+        image: container-registry/ossensor:latest
+        env:
+        - name: VSENSOR_HOSTNAME
+          value: "192.168.0.1"
+        - name: VSENSOR_HMAC_KEY
+          value: "js84ld9vm3hff"
+        - name: OSSENSOR_DEBUG
+          value: "2"
+        - name: ANTIGENA_ENABLED
+          value: "false"
+        - name: NETWORK_DEVICE_BLACKLIST
+          value: "^veth"
+        - name: NETWORK_DEVICE_WHITELIST
+          value: "^eth"
+        - name: BPF
+          value: "not port 80"
