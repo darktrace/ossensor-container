@@ -9,7 +9,7 @@
 
 The osSensor is available on Docker Hub at https://hub.docker.com/r/darktrace/ossensor. It requires two environment variables to run, otherwise the setup will produce an error:
 
-  * `VSENSOR_IP_PORT` - The host and port of the vSensor instance e.g. `10.0.0.1:443`
+  * `VSENSOR_HOSTNAME` - The host and port of the vSensor instance e.g. `10.0.0.1:443`
   * `VSENSOR_HMAC_KEY` - HMAC key for use with the vSensor e.g. `js84ld9vm3hff`
 
 The basic deployment command is:
@@ -28,7 +28,7 @@ To specify an environment file, deploy the osSensor using the following command:
 
       docker run --env-file <environment-file> --network=host darktrace/ossensor:latest
 
-The environment file **must** contain the two variables - `VSENSOR_IP_PORT` and `VSENSOR_HMAC_KEY` - or the container will not start.
+The environment file **must** contain the two variables - `VSENSOR_HOSTNAME` and `VSENSOR_HMAC_KEY` - or the container will not start.
 
   Specifying environment variables with an `-e` flag **overrides environment variables specified in the environment file**.
 
@@ -49,7 +49,7 @@ Please note, environment variables cannot be modified after the osSensor is init
 
 Run docker image, passing in environment variables with the `-e` flag:  
 
-    docker run -e VSENSOR_IP_PORT=10.0.2.15:443 -e VSENSOR_HMAC_KEY=js84ld9vm3hff darktrace/ossensor:latest
+    docker run -e VSENSOR_HOSTNAME=10.0.2.15:443 -e VSENSOR_HMAC_KEY=js84ld9vm3hff darktrace/ossensor:latest
 
 Run docker image, passing in environment variables with an environment file and `--env-file` flag:  
 
