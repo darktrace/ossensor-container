@@ -9,7 +9,7 @@
 
 The osSensor is available on Docker Hub at https://hub.docker.com/r/darktrace/ossensor. It requires two environment variables to run, otherwise the setup will produce an error:
 
-  * `VSENSOR_HOSTNAME` - The host and port of the vSensor instance e.g. `10.0.0.1:443`
+  * `VSENSOR_HOSTNAME` - The hostname of the vSensor instance e.g. `10.0.0.1`
   * `VSENSOR_HMAC_KEY` - HMAC key for use with the vSensor e.g. `js84ld9vm3hff`
 
 The basic deployment command is:
