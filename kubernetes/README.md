@@ -76,7 +76,7 @@ To shell into the container for troubleshooting (for example, testing network co
 
 ## Network Whitelist and Blacklist
 
-The osSensor allows for a whitelist and blacklist to limit listening interfaces. If no blacklist/whitelist is provided, the osSensor will listen on all interfaces; in some environments this may result in duplicated traffic and therefore an increase in bandwidth usage. The blacklist and whitelist support `egrep` Regular Expression syntax. Where the scope of the whitelist and blacklist overlap, the blacklist will take priority.
+The osSensor allows for a whitelist and blacklist to limit listening interfaces. If no blacklist/whitelist is provided, the osSensor will listen on all interfaces except loopback; in some environments this may result in duplicated traffic and therefore an increase in bandwidth usage. The blacklist and whitelist support `egrep` Regular Expression syntax. Where the scope of the whitelist and blacklist overlap, the blacklist will take priority.
 
 + Where a whitelist is provided, the osSensor will disregard all traffic other than that passing through the whitelisted interfaces.
 
