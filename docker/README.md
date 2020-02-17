@@ -47,6 +47,8 @@ Please note, environment variables cannot be modified after the osSensor is init
 
 ## Example Invocations
 
+**Please note that if you would like the container to run in the background you should also provide the `-d` flag**
+
 Run docker image, passing in environment variables with the `-e` flag:  
 
     docker run -e VSENSOR_HOSTNAME=10.0.2.15 -e VSENSOR_HMAC_KEY=js84ld9vm3hff darktrace/ossensor:latest
