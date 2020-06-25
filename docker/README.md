@@ -34,14 +34,15 @@ The environment file **must** contain the two variables - `VSENSOR_HOSTNAME` and
 
 **Example Environment file**:
 
-      VSENSOR_HOSTNAME="192.168.0.1"
-      VSENSOR_HMAC_KEY="js84ld9vm3hff"
-      OSSENSOR_DEBUG="2"
-      ANTIGENA_ENABLED="true"
-      NETWORK_DEVICE_BLACKLIST="^veth"
-      NETWORK_DEVICE_WHITELIST="^eth"
-      BPF="not port 80"
-      ~
+```
+VSENSOR_HOSTNAME=192.168.0.1
+VSENSOR_HMAC_KEY=js84ld9vm3hff
+OSSENSOR_DEBUG=3
+ANTIGENA_ENABLED=true
+NETWORK_DEVICE_BLACKLIST=^veth
+NETWORK_DEVICE_WHITELIST=^en
+BPF=not port 80
+```
 
 Please note, environment variables cannot be modified after the osSensor is initialized. To modify environment variables, please redeploy the osSensor with your changes.
 
