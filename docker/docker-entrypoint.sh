@@ -7,6 +7,11 @@
 # 2 = Print info such as sending (number / size) or not sending, and the response. Sent packets stat will work in this level
 # 1 = Packet capture stats & Antigena stats
 # 0 = Basic info
+
+# Backwards compatibility
+NETWORK_DEVICE_INCLUDELIST=${NETWORK_DEVICE_INCLUDELIST:-$NETWORK_DEVICE_WHITELIST}
+NETWORK_DEVICE_EXCLUDELIST=${NETWORK_DEVICE_EXCLUDELIST:-$NETWORK_DEVICE_BLACKLIST}
+
 Debug=${OSSENSOR_DEBUG:-1}
 
 # The host and port of the vSensor instance
@@ -37,29 +42,29 @@ outputdevices=`cat /proc/net/dev | grep : | cut -d : -f 1 | tr -d '[:blank:]'`
 outputdevices=`echo "$outputdevices" | grep -wv "lo"`
 
 # whitespace separated list of network interfaces to ignore
-if [ -z "$NETWORK_DEVICE_BLACKLIST" ]
+if [ -z "$NETWORK_DEVICE_EXCLUDELIST" ]
 then
-  echo Network blacklist is blank
+  echo Network excludelist is blank
 else
-  echo Network blacklist: $NETWORK_DEVICE_BLACKLIST
-  # remove blacklist entries
-  for blacklist_entry in `echo $NETWORK_DEVICE_BLACKLIST`; do
-    outputdevices=`echo "$outputdevices" | egrep -v "$blacklist_entry"`
-    echo $blacklist_entry
+  echo Network excludelist: $NETWORK_DEVICE_EXCLUDELIST
+  # remove exclude list entries
+  for excludelist_entry in `echo $NETWORK_DEVICE_EXCLUDELIST`; do
+    outputdevices=`echo "$outputdevices" | egrep -v "$excludelist_entry"`
+    echo $excludelist_entry
   done
 fi
 
 # whitespace separated list of network interfaces to include
-if [ -z "$NETWORK_DEVICE_WHITELIST" ]
+if [ -z "$NETWORK_DEVICE_INCLUDELIST" ]
 then
-  echo Network whitelist is blank
+  echo Network includelist is blank
   devices=`echo "$outputdevices" | sort | uniq | awk NF | paste -s -d ','`
 else
-  echo Network whitelist: $NETWORK_DEVICE_WHITELIST
+  echo Network includelist: $NETWORK_DEVICE_INCLUDELIST
   finaldevices=
-  # keep whitelist entries
-  for whitelist_entry in $NETWORK_DEVICE_WHITELIST; do
-    finaldevices="$finaldevices"`echo "$outputdevices" | egrep "$whitelist_entry"`$'\n'
+  # keep include list entries
+  for includelist_entry in $NETWORK_DEVICE_INCLUDELIST; do
+    finaldevices="$finaldevices"`echo "$outputdevices" | egrep "$includelist_entry"`$'\n'
   done
   finaldevices=`echo "$finaldevices" | sort | uniq | awk NF | paste -s -d ','`
   devices="$finaldevices"
@@ -71,7 +76,7 @@ devices="$devices"
 # Check that devices were set properly
 if [ -z "$devices" ]
 then
-  echo "Failed to configure devices, doublecheck network interfaces blacklist and whitelist"
+  echo "Failed to configure devices, doublecheck network interfaces excludelist and includelist"
   exit 1
 fi
 

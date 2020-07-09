@@ -46,9 +46,9 @@ The best way to deploy osSensors to your Kubernetes cluster is via a _Daemonset_
                 value: "2"
               - name: ANTIGENA_ENABLED
                 value: "false"
-              - name: NETWORK_DEVICE_BLACKLIST
+              - name: NETWORK_DEVICE_EXCLUDELIST
                 value: "^veth"
-              - name: NETWORK_DEVICE_WHITELIST
+              - name: NETWORK_DEVICE_INCLUDELIST
                 value: "^eth"
               - name: BPF
                 value: "not port 80"
@@ -74,21 +74,21 @@ Please note, environment variables cannot be modified after the osSensor is init
 
 To shell into the container for troubleshooting (for example, testing network connectivity to the vSensor) use `kubectl exec -it <ossensor-pod-name> /bin/bash`. The osSensor image is a streamlined image and does not contain any network troubleshooting tools as standard.
 
-## Network Whitelist and Blacklist
+## Network Include list and Exclude list
 
-The osSensor allows for a whitelist and blacklist to limit listening interfaces. If no blacklist/whitelist is provided, the osSensor will listen on all interfaces except loopback; in some environments this may result in duplicated traffic and therefore an increase in bandwidth usage. The blacklist and whitelist support `egrep` Regular Expression syntax. Where the scope of the whitelist and blacklist overlap, the blacklist will take priority.
+The osSensor allows for an include list and exclude list to limit listening interfaces. If no exclude list/include list is provided, the osSensor will listen on all interfaces except loopback; in some environments this may result in duplicated traffic and therefore an increase in bandwidth usage. The exclude list and include list support `egrep` Regular Expression syntax. Where the scope of the include list and exclude list overlap, the exclude list will take priority.
 
-+ Where a whitelist is provided, the osSensor will disregard all traffic other than that passing through the whitelisted interfaces.
++ Where an include list is provided, the osSensor will disregard all traffic other than that passing through the included interfaces.
 
-  For example: `NETWORK_DEVICE_WHITELIST="^eth"` will discard all traffic that is not directed at interfaces beginning with `eth`.
+  For example: `NETWORK_DEVICE_INCLUDELIST="^eth"` will discard all traffic that is not directed at interfaces beginning with `eth`.
 
-+ Where a blacklist is provided, all traffic will be forwarded apart from traffic to the blacklisted interfaces.
++ Where an exclude list is provided, all traffic will be forwarded apart from traffic to the excluded interfaces.
 
-  For example: `NETWORK_DEVICE_BLACKLIST="^veth"` will discard all traffic to interfaces beginning with `veth`.
+  For example: `NETWORK_DEVICE_EXCLUDELIST="^veth"` will discard all traffic to interfaces beginning with `veth`.
 
-+ Where a whitelist and a blacklist are provided, the blacklist can be used to remove specific interfaces from the scope of the whitelist
++ Where an include list and an exclude list are provided, the exclude list can be used to remove specific interfaces from the scope of the include list
 
-  For example: `NETWORK_DEVICE_BLACKLIST="eth7"` and `NETWORK_DEVICE_WHITELIST="^eth"` will forward all traffic from interfaces beginning with eth, apart from eth7 which will be disregarded.
+  For example: `NETWORK_DEVICE_EXCLUDELIST="eth7"` and `NETWORK_DEVICE_INCLUDELIST="^eth"` will forward all traffic from interfaces beginning with eth, apart from eth7 which will be disregarded.
 
 ## osSensor Environment Variables
 
@@ -106,8 +106,8 @@ The osSensor is configurable by key=value pairs via the use of environment varia
 |      OSSENSOR\_DEBUG       |                                                          Set from level 0 (info level logging) to 5 (full packet data dumped).                                                          |              1              |
 |     ANTIGENA\_ENABLED      |                                                                                   Boolean value to enable Antigena capabilities.                                                                                    |            true             |
 |   ANTIGENA\_TIME\_PERIOD   |                                                                       Time period in seconds between sending Antigena actions to the vSensor.                                                                       |              5              |
-| NETWORK\_DEVICE\_BLACKLIST | Whitespace separated list of network interface regex patterns to ignore. The blacklist takes priority over the whitelist. Any interface in the blacklist will not be monitored, **even if it is in the whitelist**. |             ''              |
-| NETWORK\_DEVICE\_WHITELIST |                                        Whitespace separated list of network interfaces regex patterns to include. Any interface not in the whitelist will not be monitored.                                         |             ''              |
+| NETWORK\_DEVICE\_EXCLUDELIST | Whitespace separated list of network interface regex patterns to ignore. The exclude list takes priority over the include list. Any interface in the exclude list will not be monitored, **even if it is in the include list**. |             ''              |
+| NETWORK\_DEVICE\_INCLUDELIST |                                        Whitespace separated list of network interfaces regex patterns to include. Any interface not in the include list will not be monitored.                                         |             ''              |
 |     BPF      |                                                                                        Berkeley Packet Filter to apply.                                                                                        |        **''**         |
 
 ### Debug levels

@@ -20,7 +20,7 @@ The basic deployment command is:
 
 + The latest stable release of the Darktrace osSensor will always be tagged with  `:latest`. Additionally we tag the osSensor with semantic versioning `ossensor:MAJOR.MINOR.PATCH` and `ossensor:MAJOR`.
 
-Further configuration variables can be defined; a full list of available variables can be found in below.
+Further configuration variables can be defined; a full list of available variables can be found below.
 
 Any additional configurations should be provided via environmental variables. These can be passed with the `-e` flag to `docker run`, or with an environment file by using the `--env-file` argument to `docker-run`.
 
@@ -39,8 +39,8 @@ VSENSOR_HOSTNAME=192.168.0.1
 VSENSOR_HMAC_KEY=js84ld9vm3hff
 OSSENSOR_DEBUG=3
 ANTIGENA_ENABLED=true
-NETWORK_DEVICE_BLACKLIST=^veth
-NETWORK_DEVICE_WHITELIST=^en
+NETWORK_DEVICE_EXCLUDELIST=^veth
+NETWORK_DEVICE_INCLUDELIST=^en
 BPF=not port 80
 ```
 
@@ -63,21 +63,21 @@ Run docker image, passing in environment variables to monitor host network traff
     docker run --env-file environment-file --network=host -e OSSENSOR_NETWORK_DEVICE=eth0 darktrace/ossensor:latest
 > Note that specifying environment variables with an `-e` flag overrides environment variables specified in the environment file.
 
-## Network Whitelist and Blacklist
+## Network Include list and Exclude list
 
-The osSensor allows for a whitelist and blacklist to limit listening interfaces. If no blacklist/whitelist is provided, the osSensor will listen on all interfaces except loopback; in some environments this may result in duplicated traffic and therefore an increase in bandwidth usage. The blacklist and whitelist support `egrep` Regular Expression syntax. Where the scope of the whitelist and blacklist overlap, the blacklist will take priority.
+The osSensor allows for an include list and exclude list to limit listening interfaces. If no exclude list/include list is provided, the osSensor will listen on all interfaces except loopback; in some environments this may result in duplicated traffic and therefore an increase in bandwidth usage. The exclude list and include list support `egrep` Regular Expression syntax. Where the scope of the include list and exclude list overlap, the exclude list will take priority.
 
-+ Where a whitelist is provided, the osSensor will disregard all traffic other than that passing through the whitelisted interfaces.
++ Where an include list is provided, the osSensor will disregard all traffic other than that passing through the included interfaces.
 
-  For example: `NETWORK_DEVICE_WHITELIST="^eth"` will discard all traffic that is not directed at interfaces beginning with `eth`.
+  For example: `NETWORK_DEVICE_INCLUDELIST="^eth"` will discard all traffic that is not directed at interfaces beginning with `eth`.
 
-+ Where a blacklist is provided, all traffic will be forwarded apart from traffic to the blacklisted interfaces.
++ Where an exclude list is provided, all traffic will be forwarded apart from traffic to the excluded interfaces.
 
-  For example: `NETWORK_DEVICE_BLACKLIST="^veth"` will discard all traffic to interfaces beginning with `veth`.
+  For example: `NETWORK_DEVICE_EXCLUDELIST="^veth"` will discard all traffic to interfaces beginning with `veth`.
 
-+ Where a whitelist and a blacklist are provided, the blacklist can be used to remove specific interfaces from the scope of the whitelist
++ Where an include list and an exclude list are provided, the exclude list can be used to remove specific interfaces from the scope of the include list.
 
-  For example: `NETWORK_DEVICE_BLACKLIST="eth7"` and `NETWORK_DEVICE_WHITELIST="^eth"` will forward all traffic from interfaces beginning with eth, apart from eth7 which will be disregarded.
+  For example: `NETWORK_DEVICE_EXCLUDELIST="eth7"` and `NETWORK_DEVICE_INCLUDELIST="^eth"` will forward all traffic from interfaces beginning with eth, apart from eth7 which will be disregarded.
 
 ## osSensor Environment Variables
 
@@ -85,19 +85,19 @@ The osSensor is configurable by key=value pairs via the use of environment varia
 
 ### Available Variables
 
-|            Key             |                                                                                                     Description                                                                                                     |        Default value        |
-|:--------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:---------------------------:|
-|     VSENSOR\_HOSTNAME      |                                                                                        The hostname of the vSensor instance.                                                                                        |        **REQUIRED**         |
-|     VSENSOR\_HMAC\_KEY     |                                                                                         HMAC key for use with the vSensor.                                                                                          |        **REQUIRED**         |
-|       VSENSOR\_PORT        |                                                                                          The port of the vSensor instance.                                                                                          |             443             |
-| OSSENSOR\_NETWORK\_DEVICE  |                                                                                               Device to capture from.                                                                                               |       Default gateway       |
-|   OSSENSOR\_CONFIG\_PATH   |                                                                                         Location of generated config file.                                                                                          | /etc/darktrace/ossensor.cfg |
-|      OSSENSOR\_DEBUG       |                                                          Set from level 0 (info level logging) to 5 (full packet data dumped).                                                          |              1              |
-|     ANTIGENA\_ENABLED      |                                                                                   Boolean value to enable Antigena capabilities.                                                                                    |            true             |
-|   ANTIGENA\_TIME\_PERIOD   |                                                                       Time period in seconds between sending Antigena actions to the vSensor.                                                                       |              5              |
-| NETWORK\_DEVICE\_BLACKLIST | Whitespace separated list of network interface regex patterns to ignore. The blacklist takes priority over the whitelist. Any interface in the blacklist will not be monitored, **even if it is in the whitelist**. |             ''              |
-| NETWORK\_DEVICE\_WHITELIST |                                        Whitespace separated list of network interfaces regex patterns to include. Any interface not in the whitelist will not be monitored.                                         |             ''              |
-|     BPF      |                                                                                        Berkeley Packet Filter to apply.                                                                                        |        **''**         |
+|             Key              |                                                                                                           Description                                                                                                           |        Default value        |
+|:----------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:---------------------------:|
+|      VSENSOR\_HOSTNAME       |                                                                                              The hostname of the vSensor instance.                                                                                              |        **REQUIRED**         |
+|      VSENSOR\_HMAC\_KEY      |                                                                                               HMAC key for use with the vSensor.                                                                                                |        **REQUIRED**         |
+|        VSENSOR\_PORT         |                                                                                                The port of the vSensor instance.                                                                                                |             443             |
+|  OSSENSOR\_NETWORK\_DEVICE   |                                                                                                     Device to capture from.                                                                                                     |       Default gateway       |
+|    OSSENSOR\_CONFIG\_PATH    |                                                                                               Location of generated config file.                                                                                                | /etc/darktrace/ossensor.cfg |
+|       OSSENSOR\_DEBUG        |                                                                              Set from level 0 (info level logging) to 5 (full packet data dumped).                                                                              |              1              |
+|      ANTIGENA\_ENABLED       |                                                                                         Boolean value to enable Antigena capabilities.                                                                                          |            true             |
+|    ANTIGENA\_TIME\_PERIOD    |                                                                             Time period in seconds between sending Antigena actions to the vSensor.                                                                             |              5              |
+| NETWORK\_DEVICE\_EXCLUDELIST | Whitespace separated list of network interface regex patterns to ignore. The exclude list takes priority over the include list. Any interface in the exclude list will not be monitored, **even if it is in the include list**. |             ''              |
+| NETWORK\_DEVICE\_INCLUDELIST |                                             Whitespace separated list of network interfaces regex patterns to include. Any interface not in the include list will not be monitored.                                             |             ''              |
+|             BPF              |                                                                                                Berkeley Packet Filter to apply.                                                                                                 |           **''**            |
 
 ### Debug levels
 
