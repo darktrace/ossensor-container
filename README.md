@@ -14,7 +14,7 @@ Please note, the osSensor will only process traffic from non-loopback interfaces
 
 These elements are required to perform the installation process for a Darktrace osSensor.
 
-  * A Darktrace Master Appliance running Darktrace v3+ and vSensor v3.1+
+  * A Darktrace Master Appliance running Darktrace v4.0+
 
   * The IP or hostname of a configured vSensor reachable from the intended osSensor location.
 

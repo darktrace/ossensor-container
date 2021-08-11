@@ -4,7 +4,7 @@
 
 The vSensor sends each osSensor a packet filter which excludes IPs of other osSensor registered devices to avoid duplication.
 
-Additionally, in environments where the osSensor may encounter duplicate traffic, a blacklist and/or whitelist can be provided to exclude duplicate traffic.
+Additionally, in environments where the osSensor may encounter duplicate traffic, an exclude list and/or include list can be provided to exclude duplicate traffic.
 
 ### How do I know if osSensors can’t connect?
 

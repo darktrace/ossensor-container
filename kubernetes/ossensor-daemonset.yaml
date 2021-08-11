@@ -24,9 +24,9 @@ spec:
           value: "2"
         - name: ANTIGENA_ENABLED
           value: "false"
-        - name: NETWORK_DEVICE_BLACKLIST
+        - name: NETWORK_DEVICE_EXCLUDELIST
           value: "^veth"
-        - name: NETWORK_DEVICE_WHITELIST
+        - name: NETWORK_DEVICE_INCLUDELIST
           value: "^eth"
         - name: BPF
           value: "not port 80"
