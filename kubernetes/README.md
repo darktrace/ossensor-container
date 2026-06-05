@@ -46,14 +46,14 @@ The best way to deploy osSensors to your Kubernetes cluster is via a _Daemonset_
                 value: "2"
               - name: ANTIGENA_ENABLED
                 value: "false"
+              - name: NETWORK_DEVICE_ANY
+                value: "1"
               - name: NETWORK_DEVICE_EXCLUDELIST
                 value: "^veth"
               - name: NETWORK_DEVICE_INCLUDELIST
                 value: "^eth"
-              - name: NETWORK_DEVICE_ANY
-                value: "1"
-              - name: BPF
-                value: "not port 80"
+            # - name: BPF
+            #   value: "not port 80"
     ```
 
 2. Ensure that the _daemonset_ contains the two key environment variables, otherwise the setup will fail to start:

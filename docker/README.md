@@ -40,7 +40,7 @@ OSSENSOR_DEBUG=3
 ANTIGENA_ENABLED=true
 NETWORK_DEVICE_EXCLUDELIST=^veth
 NETWORK_DEVICE_INCLUDELIST=^en
-BPF=not port 80
+#BPF=not port 80
 ```
 Please note, environment variables cannot be modified after the osSensor is initialized. To modify environment variables, please redeploy the osSensor with your changes.
 
